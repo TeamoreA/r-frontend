@@ -11,6 +11,9 @@
           single-line
           hide-details
         ></v-text-field>
+        <v-btn class="ma-2" color="primary" router to="/create-product"
+          >add item</v-btn
+        >
       </v-card-title>
       <v-data-table :headers="headers" :items="products" :search="search">
         <template v-slot:[`item.action`]="{ item }">

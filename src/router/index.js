@@ -4,6 +4,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Products from "../views/Products.vue";
 import Profiles from "../views/Profiles.vue";
 import Login from "../views/Login.vue";
+import CreateProduct from "../views/CreateProduct.vue";
 
 Vue.use(VueRouter);
 
@@ -19,7 +20,12 @@ const routes = [
     component: Products
   },
   {
-    path: "/",
+    path: "/create-product",
+    name: "CreateProducts",
+    component: CreateProduct
+  },
+  {
+    path: "/login",
     name: "Login",
     component: Login
   },
