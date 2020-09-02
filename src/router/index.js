@@ -5,12 +5,18 @@ import Products from "../views/Products.vue";
 import Profiles from "../views/Profiles.vue";
 import Login from "../views/Login.vue";
 import CreateProduct from "../views/CreateProduct.vue";
+import HomePage from "../views/HomePage.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    name: "HomePage",
+    component: HomePage
+  },
+  {
+    path: "/dashboard",
     name: "Dashboard",
     component: Dashboard
   },

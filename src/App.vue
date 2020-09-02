@@ -7,25 +7,26 @@
       <router-view></router-view>
     </v-content>
     <!-- Footer here -->
-    <!-- <Footer /> -->
+    <Footer />
   </v-app>
 </template>
 
 <script>
 // import components
 import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 
 export default {
   name: "App",
 
   components: {
-    Navbar
-    // Footer
+    Navbar,
+    Footer
   },
 
   data: () => ({
-    showPassword: false
+    showPassword: false,
+    loggedIn: false
   })
 };
 </script>

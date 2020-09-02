@@ -53,32 +53,6 @@
         </template>
       </v-data-table>
     </v-card>
-    <!-- <h3 class="subheading grey--text text-lighten-4">Dashboard</h3>
-
-    <v-container class="my-5">
-      <v-row no-gutters wrap>
-        <v-col cols="12" md="6">
-          <v-card class="pa-2" tile>
-            Col1
-          </v-card>
-        </v-col>
-        <v-col cols="4" md="2">
-          <v-card class="pa-2" tile>
-            Col2
-          </v-card>
-        </v-col>
-        <v-col cols="4" md="2">
-          <v-card class="pa-2" tile>
-            Col2
-          </v-card>
-        </v-col>
-        <v-col cols="4" md="2">
-          <v-card class="pa-2" tile>
-            Col2
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container> -->
   </div>
 </template>
 
