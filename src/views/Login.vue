@@ -28,8 +28,6 @@
 export default {
   name: "Login",
   components: {},
-  data: function() {
-    false;
-  }
+  data() {}
 };
 </script>

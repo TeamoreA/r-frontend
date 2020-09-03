@@ -7,7 +7,7 @@
       <router-view></router-view>
     </v-content>
     <!-- Footer here -->
-    <Footer />
+    <Footer v-if="loggedIn === false" />
   </v-app>
 </template>
 
