@@ -3,7 +3,7 @@
     <v-container>
       <!-- Slider goes here -->
       <v-row align="center" justify="center">
-        <v-col cols="8">
+        <v-col cols="12" lg="8">
           <v-carousel hide-delimiter-background cycle show-arrows-on-hover>
             <v-carousel-item
               v-for="(item, i) in items"
@@ -16,7 +16,7 @@
       </v-row>
       <!-- products cards goes here -->
       <v-row justify="center">
-        <v-col cols="8">
+        <v-col cols="12" lg="8">
           <v-card>
             <v-card-title primary-title>
               Products
@@ -32,14 +32,12 @@
                   md="4"
                   lg="3"
                 >
-                  <v-card flat tile hover href="#">
+                  <v-card flat hover router to="/product">
                     <v-img
                       src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                       aspect-ratio="1"
                       class="white--text align-end grey lighten-2"
                     >
-                      <v-card-title>Product name</v-card-title>
                       <template v-slot:placeholder>
                         <v-row
                           class="fill-height ma-0"
@@ -53,12 +51,18 @@
                         </v-row>
                       </template>
                     </v-img>
-                    <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-                    <v-card-text class="text--primary">
-                      <div>Whitehaven Beach</div>
-
-                      <div>Whitsunday Island, Whitsunday Islands</div>
+                    <v-card-subtitle class="grey--text font-weight-bold pb-0">{{
+                      product.name
+                    }}</v-card-subtitle>
+                    <v-card-text>
+                      <div>
+                        <v-icon>mdi-phone</v-icon>
+                        <span class="green--text font-weight-black"
+                          >+254788220011</span
+                        >
+                      </div>
+                      <div><strong>Color:</strong> {{ product.color }}</div>
+                      <div><strong>Size:</strong> {{ product.size }}</div>
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -215,9 +219,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.products-cards {
-  margin: 0px;
-}
-</style>
