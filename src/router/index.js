@@ -4,6 +4,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Product from "../views/Product.vue";
 import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
 import CreateProduct from "../views/CreateProduct.vue";
 import HomePage from "../views/HomePage.vue";
 
@@ -39,6 +40,12 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login
+  },
+  // Register router
+  {
+    path: "/register",
+    name: "Register",
+    component: Register
   },
   // view profile router
   {

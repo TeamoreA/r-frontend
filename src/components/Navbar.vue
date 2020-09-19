@@ -8,8 +8,8 @@
           @click="drawer = !drawer"
         ></v-app-bar-nav-icon>
         <v-toolbar-title class="text-uppercase">
-          <span class="grey--text text-lighten-1">the</span>
-          <span class="gey--text"> r.o.</span>
+          <span class="grey--text">freak</span>
+          <span class="gey--text  text-lighten-1">an</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-avatar color="primary" class="mr-2" size="30">
@@ -47,16 +47,15 @@
     <!-- buyers app bar -->
     <v-app-bar app dense color="white" elevate-on-scroll v-else>
       <v-toolbar-title>
-        <v-btn link text to="/">
-          <span class="grey--text text-lighten-1 mr-1">the</span>
-          <span class="gey--text"> r.o.</span>
+        <v-btn text to="/">
+          <span class="grey--text">freak</span>
+          <span class="gey--text text-lighten-1">an</span>
         </v-btn>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-text-field
-        v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
