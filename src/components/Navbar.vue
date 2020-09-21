@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- admins app bar -->
-    <nav v-if="loggedIn">
+    <nav v-if="isLoggedIn">
       <v-app-bar app>
         <v-app-bar-nav-icon
           class="grey--text text-lighten-1"
@@ -12,13 +12,22 @@
           <span class="gey--text  text-lighten-1">an</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-avatar color="primary" class="mr-2" size="30">
+        <v-avatar color="primary" size="30">
           <span class="white--text">RO</span>
         </v-avatar>
-        <v-button flat color="grey">
-          <span class="text-lighten-1">Sign Out</span>
-          <v-icon right>mdi-exit-to-app</v-icon>
-        </v-button>
+        <v-menu left bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item @click="logout">
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-app-bar>
 
       <!-- side nav -->
@@ -91,6 +100,16 @@ export default {
         { icon: "mdi-account", text: "Profile", route: "/profile" }
       ]
     };
+  },
+  computed: {
+    isLoggedIn: function() {
+      return this.$store.getters.isLoggedIn;
+    }
+  },
+  methods: {
+    logout: function() {
+      this.$store.dispatch("logout").then(() => this.$router.push("/login"));
+    }
   }
 };
 </script>

@@ -4,20 +4,25 @@
       <h1 class="display-1">Login</h1>
     </v-card-title>
     <v-card-text>
-      <v-form>
-        <v-text-field label="username" prepend-icon="mdi-account-circle" />
+      <v-form @submit.prevent="save">
+        <v-text-field
+          label="username"
+          prepend-icon="mdi-account-circle"
+          v-model="user.username"
+        />
         <v-text-field
           label="password"
           :type="showPassword ? 'text' : 'password'"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           prepend-icon="mdi-lock"
+          v-model="user.password"
           @click:append="showPassword = !showPassword"
         />
       </v-form>
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn color="primary">login</v-btn>
+      <v-btn color="primary" @click="save">login</v-btn>
       <v-spacer></v-spacer>
       <v-btn
         text
@@ -33,7 +38,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   name: "Login",
   components: {},
@@ -42,21 +46,27 @@ export default {
       showPassword: false,
       user: {
         username: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
+        password: ""
       }
     };
   },
   methods: {
     save() {
-      this.loginUser(this.user);
-      this.$toasted
-        .success("You have been registerd successfully")
-        .goAway(2000);
-      this.$router.push("login");
-    },
-    ...mapActions(["loginUser"])
+      this.$store
+        .dispatch("loginUser", this.user)
+        .then(() => {
+          this.$toasted
+            .success("You have been logged in successfully")
+            .goAway(2000);
+          this.$router.push("dashboard");
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
+    }
   }
 };
 </script>
