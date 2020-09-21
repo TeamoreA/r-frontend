@@ -2,19 +2,19 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
-import axios from "axios";
+import Axios from "axios";
 import Toasted from "vue-toasted";
 import store from "./store";
 
 Vue.config.productionTip = false;
 
-const baseUrl = axios.create({
-  baseUrl: "http://127.0.0.1:8000/api"
-});
+// const baseUrl = axios.create({
+//   baseUrl: "http://127.0.0.1:8000/api"
+// });
 
-Vue.prototype.$http = baseUrl;
+Vue.prototype.$http = Axios;
 
-const token = localStorage.getItem("access");
+const token = localStorage.getItem("token");
 
 if (token) {
   Vue.prototype.$http.defaults.headers.common.Authorization = `Bearer ${token}`;

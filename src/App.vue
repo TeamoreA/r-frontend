@@ -3,11 +3,11 @@
     <!-- Navbar here -->
     <Navbar />
     <!-- Page content here -->
-    <v-content class="mx-4 mb-4">
+    <v-main class="mx-4 mb-4">
       <router-view></router-view>
-    </v-content>
+    </v-main>
     <!-- Footer here -->
-    <Footer v-if="loggedIn === false" />
+    <Footer v-if="isLoggedIn === false" />
   </v-app>
 </template>
 
@@ -27,6 +27,21 @@ export default {
   data: () => ({
     showPassword: false,
     loggedIn: false
-  })
+  }),
+  created() {
+    this.$http.interceptors.response.use(undefined, function(err) {
+      return new Promise(function() {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout");
+        }
+        throw err;
+      });
+    });
+  },
+  computed: {
+    isLoggedIn: function() {
+      return this.$store.getters.isLoggedIn;
+    }
+  }
 };
 </script>

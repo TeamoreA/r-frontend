@@ -1,194 +1,83 @@
 <template>
-  <v-card class="mx-auto pa-6"
-    ><v-card-title>
-      Add product
-    </v-card-title>
-    <v-card-text>
-      <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-        @submit.prevent="onSubmit"
-      >
-        <v-text-field
-          label="Name"
-          :counter="20"
-          :rules="nameRules"
-          required
-          v-model="product.name"
-        />
-        <v-text-field
-          label="Size"
-          :rules="nameRules"
-          required
-          v-model="product.size"
-        />
-        <v-text-field
-          label="Color"
-          type="text"
-          :rules="nameRules"
-          required
-          v-model="product.color"
-        />
-        <v-select
-          :items="items"
-          label="Category"
-          v-model="product.category"
-        ></v-select>
-        <!-- <v-file-input
-          v-model="product.files"
-          color="primary accent-4"
-          counter
-          label="Image upload"
-          multiple
-          placeholder="Select your images"
-          prepend-icon="mdi-camera"
-          :show-size="1000"
-          :error-messages="errors"
-        >
-          <template v-slot:selection="{ index, text }">
-            <v-chip v-if="index < 2" color="primary accent-4" dark label small>
-              {{ text }}
-            </v-chip>
-
-            <span
-              v-else-if="index === 2"
-              class="overline grey--text text--darken-3 mx-2"
-            >
-              +{{ files.length - 2 }} File(s)
-            </span>
-          </template>
-        </v-file-input> -->
-        <v-file-input
-          :rules="imageRules"
-          accept="image/png, image/jpeg, image/bmp"
-          placeholder="Image upload"
-          prepend-icon="mdi-camera"
-          label="Image"
-          v-model="product.image"
-        ></v-file-input>
-        <v-textarea
-          clearable
-          auto-grow
-          clear-icon="mdi-cancel"
-          label="Description"
-          value="Product description here."
-          v-model="product.description"
-        ></v-textarea>
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn :disabled="!valid" color="primary" @click="onSubmit">Submit</v-btn>
-    </v-card-actions>
-    <!-- <ValidationObserver ref="observer" v-slot="{}">
-      <v-form @submit.prevent="onSubmit">
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="Name"
-          rules="required|max:20"
+  <div class="create-product">
+    <v-card class="mx-auto pa-6"
+      ><v-card-title>
+        Add Product
+        <v-spacer></v-spacer>
+        <span>
+          <createCategory />
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+          @submit.prevent="onSubmit"
         >
           <v-text-field
-            v-model="product.name"
-            :counter="20"
-            :error-messages="errors"
             label="Name"
+            :counter="20"
+            :rules="nameRules"
             required
-          ></v-text-field>
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" name="size">
+            v-model="product.name"
+          />
           <v-text-field
-            v-model="product.size"
-            :error-messages="errors"
             label="Size"
-          ></v-text-field>
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" name="color">
-          <v-text-field
-            v-model="product.color"
-            :error-messages="errors"
-            label="Color"
-          ></v-text-field>
-        </ValidationProvider>
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="category"
-          rules="required"
-        >
-          <v-select
-            v-model="product.category"
-            :items="product.items"
-            :error-messages="errors"
-            label="Category"
-            data-vv-name="select"
+            :rules="nameRules"
             required
+            v-model="product.size"
+          />
+          <v-text-field
+            label="Color"
+            type="text"
+            :rules="nameRules"
+            required
+            v-model="product.color"
+          />
+          <v-select
+            :items="allCategories"
+            label="Category"
+            v-model="product.category"
+            item-text="name"
+            item-value="id"
           ></v-select>
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" rules="required" name="image">
           <v-file-input
-            v-model="product.files"
-            color="primary accent-4"
-            counter
-            label="Image upload"
-            multiple
-            placeholder="Select your images"
+            :rules="imageRules"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="Image upload"
             prepend-icon="mdi-camera"
-            :show-size="1000"
-            :error-messages="errors"
-          >
-            <template v-slot:selection="{ index, text }">
-              <v-chip
-                v-if="index < 2"
-                color="primary accent-4"
-                dark
-                label
-                small
-              >
-                {{ text }}
-              </v-chip>
-
-              <span
-                v-else-if="index === 2"
-                class="overline grey--text text--darken-3 mx-2"
-              >
-                +{{ files.length - 2 }} File(s)
-              </span>
-            </template>
-          </v-file-input>
-        </ValidationProvider>
-
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="Description"
-          rules="required"
-        >
+            label="Image"
+            chips
+            multiple
+            v-model="product.product_images"
+            @change="uploadFile"
+          ></v-file-input>
           <v-textarea
             clearable
+            auto-grow
             clear-icon="mdi-cancel"
-            value="Enter your the product description here"
-            v-model="product.description"
-            :error-messages="errors"
             label="Description"
-            required
+            v-model="product.description"
           ></v-textarea>
-        </ValidationProvider>
-
-        <v-btn class="mr-4" :disabled="!form.valid">submit</v-btn>
-        <v-btn @click="clear">clear</v-btn>
-      </v-form> -->
-    <!-- </ValidationObserver> -->
-  </v-card>
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn :disabled="!valid" color="primary" @click="onSubmit"
+          >Submit</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 
 <script>
 import { required, max } from "vee-validate/dist/rules";
-import {
-  extend,
-  // ValidationObserver,
-  // ValidationProvider,
-  setInteractionMode
-} from "vee-validate";
-import { mapActions } from "vuex";
+import { extend, setInteractionMode } from "vee-validate";
+
+import createCategory from "./createCategory";
+import { mapGetters, mapActions } from "vuex";
 
 setInteractionMode("eager");
 
@@ -204,34 +93,51 @@ extend("max", {
 
 export default {
   name: "CreateProduct",
-  // components: {
-  //   ValidationProvider,
-  //   ValidationObserver
-  // },
-  data: () => ({
-    product: {
-      name: "",
-      image: "",
-      size: "",
-      color: "",
-      category: null
-    },
-    items: ["clothes", "shoes", "hair"],
-    valid: true,
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 20) || "Name must be less than 20 characters"
-    ],
-    imageRules: [
-      value =>
-        !value || value.size < 2000000 || "Image size should be less than 2 MB!"
-    ]
-  }),
+  data() {
+    return {
+      files: null,
+      product: {
+        name: "",
+        product_images: null,
+        size: "",
+        color: "",
+        category: null
+      },
+      valid: true,
+      nameRules: [
+        v => !!v || "Name is required",
+        v => (v && v.length <= 20) || "Name must be less than 20 characters"
+      ]
+      // imageRules: [
+      //   value =>
+      //     !value ||
+      //     value.size < 2000000 ||
+      //     "Image size should be less than 2 MB!"
+      // ]
+    };
+  },
 
   methods: {
+    uploadFile(event) {
+      this.files = event.target.files;
+    },
     onSubmit() {
-      // this.$refs.observer.validate();
-      this.addProduct(this.product);
+      const formData = new FormData();
+      for (const i of Object.keys(this.files)) {
+        formData.append("product_images", this.files[i]);
+      }
+      this.$store
+        .dispatch("addProduct", formData)
+        .then(() => {
+          this.$toasted.success("New product added successfully").goAway(2000);
+          this.$router.push("dashboard");
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
     },
     clear() {
       this.product.name = "";
@@ -241,7 +147,14 @@ export default {
       this.product.checkbox = null;
       this.$refs.observer.reset();
     },
-    ...mapActions(["addProduct"])
+    ...mapActions(["addProduct", "fetchCategories"])
+  },
+  components: {
+    createCategory
+  },
+  computed: mapGetters(["allCategories"]),
+  created() {
+    this.fetchCategories();
   }
 };
 </script>
