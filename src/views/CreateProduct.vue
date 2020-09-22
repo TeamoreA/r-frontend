@@ -5,7 +5,7 @@
         Add Product
         <v-spacer></v-spacer>
         <span>
-          <createCategory />
+          <CreateCategory />
         </span>
       </v-card-title>
       <v-card-text>
@@ -122,7 +122,7 @@
 import { required, max } from "vee-validate/dist/rules";
 import { extend, setInteractionMode } from "vee-validate";
 
-import createCategory from "./createCategory";
+import CreateCategory from "./CreateCategory";
 import { mapGetters, mapActions } from "vuex";
 
 setInteractionMode("eager");
@@ -201,7 +201,7 @@ export default {
     ...mapActions(["addProduct", "fetchCategories"])
   },
   components: {
-    createCategory
+    CreateCategory
   },
   computed: mapGetters(["allCategories"]),
   created() {

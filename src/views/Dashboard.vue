@@ -50,7 +50,7 @@
               rounded
               outlined
               color="error"
-              @click="deleteProduct(item.id)"
+              @click="deletePdct(item.id)"
               >delete</v-btn
             ></span
           >
@@ -78,7 +78,7 @@ export default {
         },
         { text: "Size", value: "size" },
         { text: "Color", value: "color" },
-        { text: "Number of Items", value: "number" },
+        { text: "Number of Items", value: "no_of_items" },
         { text: "Price (Ksh)", value: "price" },
         { text: "", value: "action" }
       ],
@@ -86,7 +86,24 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["fetchProducts", "deleteProduct"])
+    ...mapActions(["fetchProducts", "deleteProduct"]),
+    deletePdct(id) {
+      this.$store
+        .dispatch("deleteProduct", id)
+        .then(() => {
+          this.$toasted
+            .success("Product has been deleted successfully")
+            .goAway(2000);
+          // this.$router.push("dashboard");
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
+      this.dialog = false;
+    }
   },
   computed: mapGetters(["allProducts"]),
   created() {

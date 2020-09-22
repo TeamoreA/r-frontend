@@ -7,6 +7,7 @@ import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import CreateProduct from "../views/CreateProduct.vue";
+import UpdateProduct from "../views/UpdateProduct.vue";
 import HomePage from "../views/HomePage.vue";
 
 Vue.use(VueRouter);
@@ -38,6 +39,12 @@ const routes = [
     path: "/create-product",
     name: "CreateProducts",
     component: CreateProduct
+  },
+  // update product router
+  {
+    path: "/update-product",
+    name: "UpdateProducts",
+    component: UpdateProduct
   },
   // login router
   {

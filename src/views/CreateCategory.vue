@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: "createCategory",
+  name: "CreateCategory",
   data() {
     return {
       dialog: false,

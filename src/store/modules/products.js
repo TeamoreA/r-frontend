@@ -36,14 +36,32 @@ const actions = {
         .catch(err => {
           console.log("err here**");
           console.log(err);
-          commit("categoryError", err);
+          commit("productError", err);
           reject(err);
         });
     });
   },
-  async deleteProduct({ commit }, id) {
-    await axios.delete(`${baseUrl}/product/${id}`);
-    commit("removeProduct", id);
+  // async deleteProduct({ commit }, id) {
+  //   await axios.delete(`${baseUrl}/product/${id}`);
+  //   commit("removeProduct", id);
+  // },
+  deleteProduct({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`${baseUrl}/product/${id}`)
+        .then(resp => {
+          console.log("data here**");
+          console.log(id);
+          commit("removeProduct", id);
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log("err here**");
+          console.log(err);
+          commit("categoryError", err);
+          reject(err);
+        });
+    });
   },
   // async addCategory({ commit }, data) {
   //   const response = await axios.post(`${baseUrl}/category/`, data);
@@ -81,9 +99,12 @@ const mutations = {
   setProducts: (state, products) => (state.products = products),
   newProduct: (state, product) => state.products.unshift(product),
   removeProduct: (state, id) =>
-    (state.products = state.products.filter(product => product.id !== id)),
+    (state.products = state.products.data.filter(product => product.id !== id)),
   newCategory: (state, category) => state.categories.unshift(category),
   categoryError(state, err) {
+    state.status = err;
+  },
+  productError(state, err) {
     state.status = err;
   },
   setCategories: (state, cats) => (state.categories = cats)
