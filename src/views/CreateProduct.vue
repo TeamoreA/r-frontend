@@ -1,114 +1,129 @@
 <template>
-  <v-card class="mx-auto pa-6"
-    ><v-card-title>
-      Add product
-    </v-card-title>
-
-    <ValidationObserver ref="observer" v-slot="{}">
-      <form>
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="Name"
-          rules="required|max:20"
+  <div class="create-product">
+    <v-card class="mx-auto pa-6"
+      ><v-card-title>
+        Add Product
+        <v-spacer></v-spacer>
+        <span>
+          <createCategory />
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-container fluid>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            @submit.prevent="onSubmit"
+            ><v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Name"
+                  :counter="20"
+                  :rules="nameRules"
+                  dense
+                  required
+                  v-model="product.name"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Size"
+                  :rules="numberRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.size"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Color"
+                  type="text"
+                  :rules="colorRules"
+                  dense
+                  required
+                  v-model="product.color"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  :items="allCategories"
+                  label="Category"
+                  v-model="product.category"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Price (Ksh)"
+                  :rules="priceRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.price"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="No. of Items"
+                  :rules="numberRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.noOfItems"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-file-input
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Image upload"
+                prepend-icon="mdi-camera"
+                label="Image"
+                multiple
+                small-chips
+                dense
+                v-model="files"
+                @change="uploadFile"
+                ref="files"
+              ></v-file-input>
+            </v-row>
+            <v-row>
+              <v-textarea
+                clearable
+                auto-grow
+                dense
+                clear-icon="mdi-cancel"
+                label="Description"
+                v-model="product.description"
+              ></v-textarea>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn :disabled="!valid" color="primary" @click="onSubmit"
+          >Submit</v-btn
         >
-          <v-text-field
-            v-model="name"
-            :counter="20"
-            :error-messages="errors"
-            label="Name"
-            required
-          ></v-text-field>
-        </ValidationProvider>
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="email"
-          rules="required|email"
-        >
-          <v-text-field
-            v-model="email"
-            :error-messages="errors"
-            label="E-mail"
-            required
-          ></v-text-field>
-        </ValidationProvider>
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="category"
-          rules="required"
-        >
-          <v-select
-            v-model="category"
-            :items="items"
-            :error-messages="errors"
-            label="Category"
-            data-vv-name="select"
-            required
-          ></v-select>
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" rules="required" name="image">
-          <v-file-input
-            v-model="files"
-            color="primary accent-4"
-            counter
-            label="Image upload"
-            multiple
-            placeholder="Select your images"
-            prepend-icon="mdi-camera"
-            :show-size="1000"
-            :error-messages="errors"
-          >
-            <template v-slot:selection="{ index, text }">
-              <v-chip
-                v-if="index < 2"
-                color="primary accent-4"
-                dark
-                label
-                small
-              >
-                {{ text }}
-              </v-chip>
-
-              <span
-                v-else-if="index === 2"
-                class="overline grey--text text--darken-3 mx-2"
-              >
-                +{{ files.length - 2 }} File(s)
-              </span>
-            </template>
-          </v-file-input>
-        </ValidationProvider>
-
-        <ValidationProvider
-          v-slot="{ errors }"
-          name="Description"
-          rules="required"
-        >
-          <v-textarea
-            clearable
-            clear-icon="mdi-cancel"
-            value="Enter your the product description here"
-            v-model="description"
-            :error-messages="errors"
-            label="Description"
-            required
-          ></v-textarea>
-        </ValidationProvider>
-
-        <v-btn class="mr-4" @click="submit">submit</v-btn>
-        <v-btn @click="clear">clear</v-btn>
-      </form>
-    </ValidationObserver>
-  </v-card>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 
 <script>
-import { required, email, max } from "vee-validate/dist/rules";
-import {
-  extend,
-  ValidationObserver,
-  ValidationProvider,
-  setInteractionMode
-} from "vee-validate";
+import { required, max } from "vee-validate/dist/rules";
+import { extend, setInteractionMode } from "vee-validate";
+
+import createCategory from "./createCategory";
+import { mapGetters, mapActions } from "vuex";
 
 setInteractionMode("eager");
 
@@ -122,37 +137,75 @@ extend("max", {
   message: "{_field_} may not be greater than {length} characters"
 });
 
-extend("email", {
-  ...email,
-  message: "Email must be valid"
-});
-
 export default {
   name: "CreateProduct",
-  components: {
-    ValidationProvider,
-    ValidationObserver
+  data() {
+    return {
+      files: "",
+      product: {
+        name: "",
+        size: "",
+        color: "",
+        category: null,
+        price: "",
+        noOfItems: ""
+      },
+      valid: true,
+      nameRules: [
+        v => !!v || "Name is required",
+        v => (v && v.length <= 20) || "Name must be less than 20 characters"
+      ],
+      colorRules: [v => !!v || "Color is required"],
+      numberRules: [v => !!v || "Valid number is required"],
+      priceRules: [v => !!v || "Price is required"]
+    };
   },
-  data: () => ({
-    name: "",
-    email: "",
-    select: null,
-    items: ["clothes", "shoes", "hair"],
-    checkbox: null
-  }),
 
   methods: {
-    submit() {
-      this.$refs.observer.validate();
+    onSubmit() {
+      let formData = new FormData();
+      for (const i of this.files) {
+        formData.append("product_images", i, i.name);
+      }
+      formData.append("name", this.product.name);
+      formData.append("size", this.product.size);
+      formData.append("color", this.product.color);
+      formData.append("category", this.product.category);
+      formData.append("price", this.product.price);
+      formData.append("no_of_items", this.product.noOfItems);
+      this.$store
+        .dispatch("addProduct", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(() => {
+          this.$toasted.success("New product added successfully").goAway(2000);
+          this.$router.push("dashboard");
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
     },
     clear() {
-      this.name = "";
-      this.email = "";
-      this.description = "";
-      this.select = null;
-      this.checkbox = null;
+      this.product.name = "";
+      this.product.email = "";
+      this.product.description = "";
+      this.product.select = null;
+      this.product.checkbox = null;
       this.$refs.observer.reset();
-    }
+    },
+    ...mapActions(["addProduct", "fetchCategories"])
+  },
+  components: {
+    createCategory
+  },
+  computed: mapGetters(["allCategories"]),
+  created() {
+    this.fetchCategories();
   }
 };
 </script>

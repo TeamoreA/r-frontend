@@ -1,9 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
 import Dashboard from "../views/Dashboard.vue";
 import Product from "../views/Product.vue";
 import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
 import CreateProduct from "../views/CreateProduct.vue";
 import HomePage from "../views/HomePage.vue";
 
@@ -20,7 +22,10 @@ const routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    component: Dashboard
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    }
   },
   // view single product router
   {
@@ -40,6 +45,12 @@ const routes = [
     name: "Login",
     component: Login
   },
+  // Register router
+  {
+    path: "/register",
+    name: "Register",
+    component: Register
+  },
   // view profile router
   {
     path: "/profile",
@@ -52,4 +63,15 @@ const router = new VueRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
+      next();
+      return;
+    }
+    next("/");
+  } else {
+    next();
+  }
+});
 export default router;

@@ -15,7 +15,11 @@
           >add item</v-btn
         >
       </v-card-title>
-      <v-data-table :headers="headers" :items="products" :search="search">
+      <v-data-table
+        :headers="headers"
+        :items="allProducts.data"
+        :search="search"
+      >
         <template v-slot:[`item.action`]="{ item }">
           <span
             ><v-btn
@@ -46,7 +50,7 @@
               rounded
               outlined
               color="error"
-              v-model="item.action"
+              @click="deleteProduct(item.id)"
               >delete</v-btn
             ></span
           >
@@ -58,7 +62,7 @@
 
 <script>
 // @ is an alias to /src
-
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Dashboard",
   components: {},
@@ -78,89 +82,15 @@ export default {
         { text: "Price (Ksh)", value: "price" },
         { text: "", value: "action" }
       ],
-      products: [
-        {
-          name: "Frozen Yogurt",
-          size: 159,
-          color: "white",
-          number: 24,
-          price: 4.0,
-          action: "1%"
-        },
-        {
-          name: "Ice cream sandwich",
-          size: 237,
-          color: "orange",
-          number: 37,
-          price: 4.3,
-          action: "1%"
-        },
-        {
-          name: "Eclair",
-          size: 262,
-          color: "cyan",
-          number: 23,
-          price: 6.0,
-          action: "7%"
-        },
-        {
-          name: "Cupcake",
-          size: 305,
-          color: "deep blue",
-          number: 67,
-          price: 4.3,
-          action: "8%"
-        },
-        {
-          name: "Gingerbread",
-          size: 356,
-          color: "cyan",
-          number: 49,
-          price: 3.9,
-          action: "16%"
-        },
-        {
-          name: "Jelly bean",
-          size: 375,
-          color: "yellow",
-          number: 94,
-          price: 0.0,
-          action: "0%"
-        },
-        {
-          name: "Lollipop",
-          size: 392,
-          color: "red",
-          number: 98,
-          price: 0,
-          action: "2%"
-        },
-        {
-          name: "Honeycomb",
-          size: 408,
-          color: "cyan",
-          number: 87,
-          price: 6.5,
-          action: "45%"
-        },
-        {
-          name: "Donut",
-          size: 452,
-          color: "cyan",
-          number: 51,
-          price: 4.9,
-          action: "22%"
-        },
-        {
-          name: "KitKat",
-          size: 518,
-          color: "cyan",
-          number: 65,
-          price: 7,
-          action: "6%"
-        }
-      ]
+      products: []
     };
+  },
+  methods: {
+    ...mapActions(["fetchProducts", "deleteProduct"])
+  },
+  computed: mapGetters(["allProducts"]),
+  created() {
+    this.fetchProducts();
   }
 };
 </script>

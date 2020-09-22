@@ -24,8 +24,8 @@
             <v-container fluid>
               <v-row wrap>
                 <v-col
-                  v-for="product in products"
-                  :key="product.name"
+                  v-for="(product, i) in allProducts.data"
+                  :key="i"
                   class="d-flex child-flex"
                   cols="12"
                   sm="6"
@@ -76,7 +76,9 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
+  name: "Homepage",
   data() {
     return {
       items: [
@@ -92,130 +94,15 @@ export default {
         {
           src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
         }
-      ],
-      products: [
-        {
-          name: "Frozen Yogurt",
-          size: 159,
-          color: "white",
-          number: 24,
-          price: 4.0,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Ice cream sandwich",
-          size: 237,
-          color: "orange",
-          number: 37,
-          price: 4.3,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Eclair",
-          size: 262,
-          color: "cyan",
-          number: 23,
-          price: 6.0,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Cupcake",
-          size: 305,
-          color: "deep blue",
-          number: 67,
-          price: 4.3,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Gingerbread",
-          size: 356,
-          color: "cyan",
-          number: 49,
-          price: 3.9,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Jelly bean",
-          size: 375,
-          color: "yellow",
-          number: 94,
-          price: 0.0,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Lollipop",
-          size: 392,
-          color: "red",
-          number: 98,
-          price: 0,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Honeycomb",
-          size: 408,
-          color: "cyan",
-          number: 87,
-          price: 6.5,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "Donut",
-          size: 452,
-          color: "cyan",
-          number: 51,
-          price: 4.9,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        },
-        {
-          name: "KitKat",
-          size: 518,
-          color: "cyan",
-          number: 65,
-          price: 7,
-          description:
-            "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus."
-        }
       ]
     };
+  },
+  methods: {
+    ...mapActions(["fetchProducts"])
+  },
+  computed: mapGetters(["allProducts"]),
+  created() {
+    this.fetchProducts();
   }
 };
 </script>
