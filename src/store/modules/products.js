@@ -27,9 +27,9 @@ const actions = {
       axios
         .post(`${baseUrl}/product/`, data)
         .then(resp => {
+          const product = resp.data.data;
           console.log("data here**");
           console.log(resp.data.data);
-          const product = resp.data.data;
           commit("newProduct", product);
           resolve(resp);
         })

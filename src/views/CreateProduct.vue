@@ -9,58 +9,104 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-form
-          ref="form"
-          v-model="valid"
-          lazy-validation
-          @submit.prevent="onSubmit"
-        >
-          <v-text-field
-            label="Name"
-            :counter="20"
-            :rules="nameRules"
-            required
-            v-model="product.name"
-          />
-          <v-text-field
-            label="Size"
-            :rules="nameRules"
-            required
-            v-model="product.size"
-          />
-          <v-text-field
-            label="Color"
-            type="text"
-            :rules="nameRules"
-            required
-            v-model="product.color"
-          />
-          <v-select
-            :items="allCategories"
-            label="Category"
-            v-model="product.category"
-            item-text="name"
-            item-value="id"
-          ></v-select>
-          <v-file-input
-            :rules="imageRules"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Image upload"
-            prepend-icon="mdi-camera"
-            label="Image"
-            chips
-            multiple
-            v-model="product.product_images"
-            @change="uploadFile"
-          ></v-file-input>
-          <v-textarea
-            clearable
-            auto-grow
-            clear-icon="mdi-cancel"
-            label="Description"
-            v-model="product.description"
-          ></v-textarea>
-        </v-form>
+        <v-container fluid>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            @submit.prevent="onSubmit"
+            ><v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Name"
+                  :counter="20"
+                  :rules="nameRules"
+                  dense
+                  required
+                  v-model="product.name"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Size"
+                  :rules="numberRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.size"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Color"
+                  type="text"
+                  :rules="colorRules"
+                  dense
+                  required
+                  v-model="product.color"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  :items="allCategories"
+                  label="Category"
+                  v-model="product.category"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Price (Ksh)"
+                  :rules="priceRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.price"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="No. of Items"
+                  :rules="numberRules"
+                  type="number"
+                  dense
+                  required
+                  v-model="product.noOfItems"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-file-input
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Image upload"
+                prepend-icon="mdi-camera"
+                label="Image"
+                multiple
+                small-chips
+                dense
+                v-model="files"
+                @change="uploadFile"
+                ref="files"
+              ></v-file-input>
+            </v-row>
+            <v-row>
+              <v-textarea
+                clearable
+                auto-grow
+                dense
+                clear-icon="mdi-cancel"
+                label="Description"
+                v-model="product.description"
+              ></v-textarea>
+            </v-row>
+          </v-form>
+        </v-container>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
@@ -95,39 +141,44 @@ export default {
   name: "CreateProduct",
   data() {
     return {
-      files: null,
+      files: "",
       product: {
         name: "",
-        product_images: null,
         size: "",
         color: "",
-        category: null
+        category: null,
+        price: "",
+        noOfItems: ""
       },
       valid: true,
       nameRules: [
         v => !!v || "Name is required",
         v => (v && v.length <= 20) || "Name must be less than 20 characters"
-      ]
-      // imageRules: [
-      //   value =>
-      //     !value ||
-      //     value.size < 2000000 ||
-      //     "Image size should be less than 2 MB!"
-      // ]
+      ],
+      colorRules: [v => !!v || "Color is required"],
+      numberRules: [v => !!v || "Valid number is required"],
+      priceRules: [v => !!v || "Price is required"]
     };
   },
 
   methods: {
-    uploadFile(event) {
-      this.files = event.target.files;
-    },
     onSubmit() {
-      const formData = new FormData();
-      for (const i of Object.keys(this.files)) {
-        formData.append("product_images", this.files[i]);
+      let formData = new FormData();
+      for (const i of this.files) {
+        formData.append("product_images", i, i.name);
       }
+      formData.append("name", this.product.name);
+      formData.append("size", this.product.size);
+      formData.append("color", this.product.color);
+      formData.append("category", this.product.category);
+      formData.append("price", this.product.price);
+      formData.append("no_of_items", this.product.noOfItems);
       this.$store
-        .dispatch("addProduct", formData)
+        .dispatch("addProduct", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
         .then(() => {
           this.$toasted.success("New product added successfully").goAway(2000);
           this.$router.push("dashboard");
