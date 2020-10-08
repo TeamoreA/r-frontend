@@ -22,7 +22,7 @@ const routes = [
   // dashboard router for adin
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "dashboard",
     component: Dashboard,
     meta: {
       requiresAuth: true
@@ -31,7 +31,7 @@ const routes = [
   // view single product router
   {
     path: "/product",
-    name: "Product",
+    name: "product",
     component: Product
   },
   // create product router
@@ -42,8 +42,8 @@ const routes = [
   },
   // update product router
   {
-    path: "/update-product",
-    name: "UpdateProducts",
+    path: "/update-product/:id",
+    name: "updateProduct",
     component: UpdateProduct
   },
   // login router
