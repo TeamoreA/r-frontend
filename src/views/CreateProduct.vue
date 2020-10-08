@@ -91,7 +91,6 @@
                 small-chips
                 dense
                 v-model="files"
-                @change="uploadFile"
                 ref="files"
               ></v-file-input>
             </v-row>
@@ -148,12 +147,13 @@ export default {
         color: "",
         category: null,
         price: "",
-        noOfItems: ""
+        noOfItems: "",
+        description: ""
       },
       valid: true,
       nameRules: [
         v => !!v || "Name is required",
-        v => (v && v.length <= 20) || "Name must be less than 20 characters"
+        v => (v && v.length <= 50) || "Name must be less than 50 characters"
       ],
       colorRules: [v => !!v || "Color is required"],
       numberRules: [v => !!v || "Valid number is required"],
@@ -173,6 +173,7 @@ export default {
       formData.append("category", this.product.category);
       formData.append("price", this.product.price);
       formData.append("no_of_items", this.product.noOfItems);
+      formData.append("description", this.product.description);
       this.$store
         .dispatch("addProduct", formData, {
           headers: {

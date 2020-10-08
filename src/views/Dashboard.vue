@@ -21,15 +21,12 @@
         :search="search"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon small class="mr-2" @click="viewPdct(item.id)">
+          <!-- <v-icon small class="mr-2" @click="viewPdct(item.id)">
             mdi-pencil
           </v-icon>
-          <v-icon small @click="deleteItem(item)">
-            mdi-delete
-          </v-icon>
-          <!-- <span>
-            <UpdateProduct :itemId="item.id" /> -->
-          <!-- <v-btn
+          <DeleteProduct :productId="item.id" /> -->
+          <span>
+            <v-btn
               class="ma-2"
               x-small
               rounded
@@ -37,9 +34,10 @@
               color="primary"
               v-model="item.action"
               @click="viewPdct(item.id)"
-              >update</v-btn> -->
-          <!-- </span>
-          <span>
+              >view</v-btn
+            >
+          </span>
+          <!-- <span>
             <DeleteProduct :productId="item.id" /> -->
           <!-- <v-btn
               class="ma-2"
@@ -88,7 +86,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Dashboard",
   components: {
-    // DeleteProduct,
+    // DeleteProduct
     // UpdateProduct
   },
   data() {
@@ -101,12 +99,11 @@ export default {
           sortable: true,
           value: "name"
         },
-        { text: "Category", value: "category" },
         { text: "Size", value: "size" },
         { text: "Color", value: "color" },
         { text: "Number of Items", value: "no_of_items" },
         { text: "Price (Ksh)", value: "price" },
-        { text: "Actions", value: "actions", sortable: false }
+        { text: "", value: "actions", sortable: false }
       ],
       products: []
     };

@@ -314,8 +314,10 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
+        <DeleteProduct :productId="singleProduct.id" />
+        <v-spacer></v-spacer>
         <v-btn :disabled="!valid" color="primary" @click="onSubmit()"
-          >Submit</v-btn
+          >update</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -327,6 +329,7 @@ import { required, max } from "vee-validate/dist/rules";
 import { extend, setInteractionMode } from "vee-validate";
 
 import CreateCategory from "./CreateCategory";
+import DeleteProduct from "./DeleteProduct";
 import { mapGetters, mapActions } from "vuex";
 import ProductDataService from "../services/ProductDataService";
 
@@ -365,7 +368,7 @@ export default {
       valid: true,
       nameRules: [
         v => !!v || "Name is required",
-        v => (v && v.length <= 20) || "Name must be less than 20 characters"
+        v => (v && v.length <= 50) || "Name must be less than 50 characters"
       ],
       colorRules: [v => !!v || "Color is required"],
       numberRules: [v => !!v || "Valid number is required"],
@@ -431,7 +434,8 @@ export default {
     ...mapActions(["updateProduct", "fetchCategories", "fetchProduct"])
   },
   components: {
-    CreateCategory
+    CreateCategory,
+    DeleteProduct
   },
   computed: mapGetters(["allCategories"]),
   created() {

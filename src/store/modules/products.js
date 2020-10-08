@@ -4,11 +4,13 @@ const baseUrl = "http://127.0.0.1:8000/api";
 
 const state = {
   products: [],
-  categories: []
+  categories: [],
+  product: null
 };
 
 const getters = {
   allProducts: state => state.products,
+  singleProduct: state => state.product,
   allCategories: state => state.categories
 };
 
@@ -16,6 +18,10 @@ const actions = {
   async fetchProducts({ commit }) {
     const response = await axios.get(`${baseUrl}/product/`);
     commit("setProducts", response.data);
+  },
+  async fetchProduct({ commit }, id) {
+    const response = await axios.get(`${baseUrl}/product/${id}`);
+    commit("setProduct", response.data.data);
   },
   // async addProduct({ commit }, data) {
   //   const response = await axios.post(`${baseUrl}/product/`, data);
@@ -63,6 +69,26 @@ const actions = {
         });
     });
   },
+  updateProduct({ commit }, id, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .patch(`${baseUrl}/product/${id}`, data)
+        .then(resp => {
+          const product = resp.data.data;
+          console.log("data here**");
+          console.log(product);
+          commit("removeProduct", id);
+          commit("newProduct", product);
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log("err here**");
+          console.log(err);
+          commit("categoryError", err);
+          reject(err);
+        });
+    });
+  },
   // async addCategory({ commit }, data) {
   //   const response = await axios.post(`${baseUrl}/category/`, data);
   //   commit("newCategory", response.data);
@@ -89,18 +115,19 @@ const actions = {
   },
   async fetchCategories({ commit }) {
     const response = await axios.get(`${baseUrl}/category/`);
-    console.log("cates");
-    console.log(response.data.data);
+    // console.log("cates");
+    // console.log(response.data.data);
     commit("setCategories", response.data.data);
   }
 };
 
 const mutations = {
   setProducts: (state, products) => (state.products = products),
-  newProduct: (state, product) => state.products.unshift(product),
+  setProduct: (state, product) => (state.product = product),
+  newProduct: (state, product) => state.products.push(product),
   removeProduct: (state, id) =>
     (state.products = state.products.data.filter(product => product.id !== id)),
-  newCategory: (state, category) => state.categories.unshift(category),
+  newCategory: (state, category) => state.categories.push(category),
   categoryError(state, err) {
     state.status = err;
   },
