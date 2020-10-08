@@ -20,40 +20,60 @@
         :items="allProducts.data"
         :search="search"
       >
-        <template v-slot:[`item.action`]="{ item }">
-          <span
-            ><v-btn
-              class="ma-2"
-              x-small
-              rounded
-              outlined
-              color="normal"
-              v-model="item.action"
-              >view</v-btn
-            ></span
-          >
-          <span
-            ><v-btn
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon small class="mr-2" @click="viewPdct(item.id)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)">
+            mdi-delete
+          </v-icon>
+          <!-- <span>
+            <UpdateProduct :itemId="item.id" /> -->
+          <!-- <v-btn
               class="ma-2"
               x-small
               rounded
               outlined
               color="primary"
               v-model="item.action"
-              >update</v-btn
-            ></span
-          >
-          <span
-            ><v-btn
+              @click="viewPdct(item.id)"
+              >update</v-btn> -->
+          <!-- </span>
+          <span>
+            <DeleteProduct :productId="item.id" /> -->
+          <!-- <v-btn
               class="ma-2"
               x-small
               rounded
               outlined
               color="error"
-              @click="deletePdct(item.id)"
+              @click.stop="dialog = true"
               >delete</v-btn
-            ></span
-          >
+            > -->
+          <!-- </span> -->
+          <!-- <v-dialog v-model="dialog" max-width="290">
+            <v-card>
+              <v-card-title class="headline">
+                Delete
+              </v-card-title>
+
+              <v-card-text>
+                This item will be permernently deleted from the database
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="green darken-1" text @click="dialog = false">
+                  cancel
+                </v-btn>
+
+                <v-btn color="error" text @click="deletePdct(item.id)">
+                  Delete
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog> -->
         </template>
       </v-data-table>
     </v-card>
@@ -63,9 +83,14 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from "vuex";
+// import DeleteProduct from "./DeleteProduct";
+// import UpdateProduct from "./UpdateProduct";
 export default {
   name: "Dashboard",
-  components: {},
+  components: {
+    // DeleteProduct,
+    // UpdateProduct
+  },
   data() {
     return {
       search: "",
@@ -76,25 +101,51 @@ export default {
           sortable: true,
           value: "name"
         },
+        { text: "Category", value: "category" },
         { text: "Size", value: "size" },
         { text: "Color", value: "color" },
         { text: "Number of Items", value: "no_of_items" },
         { text: "Price (Ksh)", value: "price" },
-        { text: "", value: "action" }
+        { text: "Actions", value: "actions", sortable: false }
       ],
       products: []
     };
   },
+  computed: mapGetters(["allProducts"]),
+  mounted() {
+    this.fetchProducts();
+  },
   methods: {
-    ...mapActions(["fetchProducts", "deleteProduct"]),
-    deletePdct(id) {
+    ...mapActions(["fetchProducts"]),
+    // setActiveItem(item, index) {
+    //   this.currentItem = item;
+    //   this.currentIndex = index;
+    //   this.$router.push("update-product");
+    // },
+    // deletePdct(id) {
+    //   this.$store
+    //     .dispatch("deleteProduct", id)
+    //     .then(() => {
+    //       this.dialog = false;
+    //       this.$toasted
+    //         .success("Product has been deleted successfully")
+    //         .goAway(2000);
+    //       // this.$router.push("dashboard");
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //       this.$toasted
+    //         .error("An error has occured please try again")
+    //         .goAway(2000);
+    //     });
+    // },
+    viewPdct(id) {
       this.$store
-        .dispatch("deleteProduct", id)
-        .then(() => {
-          this.$toasted
-            .success("Product has been deleted successfully")
-            .goAway(2000);
-          // this.$router.push("dashboard");
+        .dispatch("fetchProduct", id)
+        .then(res => {
+          console.log("dshboard res here");
+          console.log(res);
+          this.$router.push({ name: "updateProduct", params: { id } });
         })
         .catch(e => {
           console.log(e);
@@ -102,12 +153,7 @@ export default {
             .error("An error has occured please try again")
             .goAway(2000);
         });
-      this.dialog = false;
     }
-  },
-  computed: mapGetters(["allProducts"]),
-  created() {
-    this.fetchProducts();
   }
 };
 </script>
