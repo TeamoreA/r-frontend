@@ -16,7 +16,7 @@ const routes = [
   // homepage router for products viewing
   {
     path: "/",
-    name: "HomePage",
+    name: "homePage",
     component: HomePage
   },
   // dashboard router for adin
@@ -30,14 +30,14 @@ const routes = [
   },
   // view single product router
   {
-    path: "/product",
+    path: "/product/:id",
     name: "product",
     component: Product
   },
   // create product router
   {
     path: "/create-product",
-    name: "CreateProducts",
+    name: "createProduct",
     component: CreateProduct
   },
   // update product router

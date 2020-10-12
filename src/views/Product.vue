@@ -5,14 +5,14 @@
         <v-card>
           <v-carousel hide-delimiter-background>
             <v-carousel-item
-              v-for="(item, i) in items"
+              v-for="(item, i) in singleProduct.images"
               :key="i"
-              :src="item.src"
+              :src="item.image"
             >
             </v-carousel-item>
           </v-carousel>
           <v-card-subtitle class="pb-0"
-            ><strong v-html="productName"></strong>
+            ><strong v-html="singleProduct.name"></strong>
           </v-card-subtitle>
 
           <v-card-text>
@@ -20,11 +20,11 @@
               <v-icon>mdi-phone</v-icon><strong>Call or WhatsApp:</strong>
               <span class="green--text font-weight-black">+254788220011</span>
             </div>
-            <div><strong>Color:</strong> {{ color }}</div>
-            <div><strong>Size:</strong> {{ size }}</div>
+            <div><strong>Color:</strong> {{ singleProduct.color }}</div>
+            <div><strong>Size:</strong> {{ singleProduct.size }}</div>
             <div><strong>Description:</strong></div>
 
-            <div class="grey--text">{{ description }}</div>
+            <div class="grey--text">{{ singleProduct.description }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -33,36 +33,33 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Product",
   data() {
-    return {
-      productName: "Frozen Yogurt",
-      size: 159,
-      color: "white",
-      number: 24,
-      price: 4.0,
-      description:
-        "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum\
-            ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel\
-            diam elementum tempor vel ut orci. Orci varius natoque penatibus et\
-            magnis dis parturient montes, nascetur ridiculus mus.",
-
-      items: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
-      ]
-    };
+    return {};
+  },
+  methods: {
+    ...mapActions(["fetchProducts"]),
+    viewProduct(id) {
+      this.$store
+        .dispatch("fetchProduct", id)
+        .then(res => {
+          console.log("dshboard res here");
+          console.log(res);
+          this.$router.push({ name: "product", params: { id } });
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
+    }
+  },
+  computed: mapGetters(["singleProduct"]),
+  created() {
+    this.fetchProduct(this.$route.params.id);
   }
 };
 </script>
