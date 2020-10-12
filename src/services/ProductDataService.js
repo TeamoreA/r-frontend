@@ -10,6 +10,9 @@ class ProductDataService {
   update(id, data) {
     return http.patch(`/product/${id}`, data);
   }
+  all() {
+    return http.get("/product/");
+  }
 }
 
 export default new ProductDataService();
