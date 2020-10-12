@@ -6,9 +6,9 @@
         <v-col cols="12" lg="8">
           <v-carousel hide-delimiter-background cycle show-arrows-on-hover>
             <v-carousel-item
-              v-for="(item, i) in items"
+              v-for="(item, i) in allImages"
               :key="i"
-              :src="item.src"
+              :src="item.image"
             >
             </v-carousel-item>
           </v-carousel>
@@ -32,9 +32,9 @@
                   md="4"
                   lg="3"
                 >
-                  <v-card flat hover router to="/product">
+                  <v-card flat hover @click="viewProduct(product.id)">
                     <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                      :src="product.images[0].image"
                       aspect-ratio="1"
                       class="white--text align-end grey lighten-2"
                     >
@@ -78,31 +78,32 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  name: "Homepage",
+  name: "HomePage",
   data() {
-    return {
-      items: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
-      ]
-    };
+    return {};
   },
   methods: {
-    ...mapActions(["fetchProducts"])
+    ...mapActions(["fetchProducts", "fetchImages"]),
+    viewProduct(id) {
+      this.$store
+        .dispatch("fetchProduct", id)
+        .then(res => {
+          console.log("dshboard res here");
+          console.log(res);
+          this.$router.push({ name: "product", params: { id } });
+        })
+        .catch(e => {
+          console.log(e);
+          this.$toasted
+            .error("An error has occured please try again")
+            .goAway(2000);
+        });
+    }
   },
-  computed: mapGetters(["allProducts"]),
+  computed: mapGetters(["allProducts", "allImages"]),
   created() {
     this.fetchProducts();
+    this.fetchImages();
   }
 };
 </script>

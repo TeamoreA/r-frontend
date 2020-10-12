@@ -7,6 +7,7 @@ import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import CreateProduct from "../views/CreateProduct.vue";
+import UpdateProduct from "../views/UpdateProduct.vue";
 import HomePage from "../views/HomePage.vue";
 
 Vue.use(VueRouter);
@@ -15,13 +16,13 @@ const routes = [
   // homepage router for products viewing
   {
     path: "/",
-    name: "HomePage",
+    name: "homePage",
     component: HomePage
   },
   // dashboard router for adin
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "dashboard",
     component: Dashboard,
     meta: {
       requiresAuth: true
@@ -29,15 +30,21 @@ const routes = [
   },
   // view single product router
   {
-    path: "/product",
-    name: "Product",
+    path: "/product/:id",
+    name: "product",
     component: Product
   },
   // create product router
   {
     path: "/create-product",
-    name: "CreateProducts",
+    name: "createProduct",
     component: CreateProduct
+  },
+  // update product router
+  {
+    path: "/update-product/:id",
+    name: "updateProduct",
+    component: UpdateProduct
   },
   // login router
   {
