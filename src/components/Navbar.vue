@@ -63,14 +63,14 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-
-      <v-text-field
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-
+      <v-responsive max-width="300" class="mx-auto">
+        <v-text-field
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-responsive>
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">

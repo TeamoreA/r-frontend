@@ -110,8 +110,6 @@ const actions = {
   },
   async fetchImages({ commit }) {
     const response = await axios.get(`${baseUrl}/image/`);
-    console.log("images here");
-    console.log(response.data.data);
     commit("setImages", response.data.data);
   }
 };

@@ -5,12 +5,9 @@ import vuetify from "./plugins/vuetify";
 import Axios from "axios";
 import Toasted from "vue-toasted";
 import store from "./store";
+import infiniteScroll from "vue-infinite-scroll";
 
 Vue.config.productionTip = false;
-
-// const baseUrl = axios.create({
-//   baseUrl: "http://127.0.0.1:8000/api"
-// });
 
 Vue.prototype.$http = Axios;
 
@@ -21,6 +18,7 @@ if (token) {
 }
 
 Vue.use(Toasted, { duration: 1000 });
+Vue.use(infiniteScroll);
 new Vue({
   router,
   vuetify,
